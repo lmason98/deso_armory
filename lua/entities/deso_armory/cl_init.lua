@@ -1,6 +1,8 @@
 include "shared.lua"
 
 local scrW, scrH = ScrW(), ScrH()
+local white, text, outline = Color(255, 255, 255), deso.col.text, deso.col.outline
+
 
 function ENT:Draw()
 	self:DrawModel()
@@ -14,9 +16,14 @@ function ENT:Draw()
 	ang:RotateAroundAxis(ang:Up(), 90)
 	ang:RotateAroundAxis(ang:Forward(), 180)
 
-	if (distance < 150) then
-		cam.Start3D2D(pos + ang:Up() * 10 + ang:Forward() * -96 + ang:Right() * -75, ang, 0.1)
-			draw.SimpleTextOutlined("[E]", "deso_hud_clip", scrW / 2, (scrH / 2) + 100, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 3, deso.col.outline)
+	text.a = deso.CalcOpacity(distance)
+	white.a = deso.CalcOpacity(distance)
+	outline.a = deso.CalcOpacity(distance)
+
+	if (distance < 275) then
+		cam.Start3D2D(pos + ang:Up() * 10, ang, 0.1)
+			draw.SimpleTextOutlined("CP Armory", "deso_hud_clip", 0, -230, text, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 3, outline)
+			draw.SimpleTextOutlined("[E]", "deso_hud_clip", 0, -100, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 3, outline)
 		cam.End3D2D()
 	end
 end

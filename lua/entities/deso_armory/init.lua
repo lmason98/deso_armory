@@ -18,5 +18,7 @@ function ENT:Use(activator, caller)
 	if (caller:IsPlayer() && caller:isCP()) then
 		net.Start("deso_cparmory_open")
 		net.Send(caller)
+	else
+		deso.Notify(caller, 1, 4, "You must be CP to use that!")
 	end
 end

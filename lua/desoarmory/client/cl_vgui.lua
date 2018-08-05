@@ -1,21 +1,70 @@
+function deso.vgui.BtnPaint(btn, w, h, text, font)
+	local col = deso.col.light
+	local textCol = deso.col.text
+	
+	if (btn:IsDown()) then
+		col = deso.col.text
+		textCol = deso.col.light
+	elseif (btn:IsHovered()) then
+		col = deso.col.text
+		textCol = Color(255, 255, 255)
+	end
+
+	surface.SetDrawColor(col)
+	surface.DrawRect(0, 0, w, h)
+
+	surface.SetDrawColor(deso.col.outline)
+	surface.DrawOutlinedRect(0, 0, w, h)
+
+	draw.SimpleTextOutlined(text, font, w / 2, h / 2, textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, deso.col.outline)
+end
+
+function deso.vgui.TabPaint(tab, w, h, text, font)
+	local col = deso.col.light
+	local textCol = deso.col.text
+	
+	if (btn:IsDown()) then
+		col = deso.col.text
+		textCol = deso.col.light
+	elseif (btn:IsHovered()) then
+		col = deso.col.text
+		textCol = Color(255, 255, 255)
+	elseif (btn.selected) then
+		col = deso.col.text
+		textCol = Color(255, 255, 255)
+	end
+
+	surface.SetDrawColor(col)
+	surface.DrawRect(0, 0, w, h)
+
+	surface.SetDrawColor(deso.col.outline)
+	surface.DrawOutlinedRect(0, 0, w, h)
+
+	draw.SimpleTextOutlined(text, font, w / 2, h / 2, textCol, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, deso.col.outline)
+end
+
 local weps = 
 {
-	[1] = {["name"] = "M4", ["classname"] = "weapon_mad_m4", ["cost"] = 2000, ["image"] = "weapons/weapon_mad_m4.vtf"},
-	[2] = {["name"] = "MP-5", ["classname"] = "weapon_mad_mp5", ["cost"] = 1500, ["image"] = "weapons/weapon_mad_mp5.vtf"},
-	[3] = {["name"] = "M3 SUPER", ["classname"] = "weapon_mad_m3", ["cost"] = 2500, ["image"] = "weapons/weapon_mad_m3.vtf"},
-	[4] = {["name"] = "Glock", ["classname"] = "weapon_mad_glock", ["cost"] = 1000, ["image"] = "weapons/weapon_mad_glock.vtf"},
-	[5] = {["name"] = "UMP-45", ["classname"] = "weapon_mad_ump", ["cost"] = 1500, ["image"] = "weapons/weapon_mad_ump.vtf"},
-	[6] = {["name"] = "Riot Shield", ["classname"] = "weapon_mad_shield", ["cost"] = 5000, ["image"] = "weapons/weapon_mad_shield.vtf"},
-	[7] = {["name"] = "Flash Grenade", ["classname"] = "weapon_mad_flash", ["cost"] = 1500, ["image"] = "weapons/weapon_mad_flash.vtf"},
-	[8] = {["name"] = "Smoke Grenade", ["classname"] = "weapon_mad_smoke", ["cost"] = 1500, ["image"] = "weapons/weapon_mad_smoke.vtf"},
-	[9] = {["name"] = "USP", ["classname"] = "weapon_mad_usp", ["cost"] = 1500, ["image"] = "weapons/weapon_mad_usp.vtf"},
-	[10] = {["name"] = "Desert Eagle", ["classname"] = "weapon_mad_deagle", ["cost"] = 1500, ["image"] = "weapons/weapon_mad_deagle.vtf"},
-	[11] = {["name"] = "Magnum Dong", ["classname"] = "weapon_mad_357", ["cost"] = 1500, ["image"] = "weapons/weapon_mad_357.vtf"}
+	[1] = {["name"] = "M4", ["classname"] = "weapon_mad_m4", ["cost"] = 4000, ["image"] = "weapons/weapon_mad_m4.vtf"},
+	[2] = {["name"] = "M3 SUPER", ["classname"] = "weapon_mad_m3", ["cost"] = 4000, ["image"] = "weapons/weapon_mad_m3.vtf"},
+	[3] = {["name"] = "MP-5", ["classname"] = "weapon_mad_mp5", ["cost"] = 2500, ["image"] = "weapons/weapon_mad_mp5.vtf"},
+	[4] = {["name"] = "Glock", ["classname"] = "weapon_mad_glock", ["cost"] = 1500, ["image"] = "weapons/weapon_mad_glock.vtf"},
+	[5] = {["name"] = "Magnum Dong", ["classname"] = "weapon_mad_357", ["cost"] = 1500, ["image"] = "weapons/weapon_mad_357.vtf"},
+	[6] = {["name"] = "Flash Grenade", ["classname"] = "weapon_mad_flash", ["cost"] = 3000, ["image"] = "weapons/weapon_mad_flash.vtf"}
 }
+
+local ammo =
+{
+	[1] = {["ammo"] = "ammo_556x45", ["ammoamount"] = 30, ["ammocost"] = 200, ["image"] = "weapons/weapon_mad_m4.vtf"},
+	[2] = {["ammo"] = "buckshot", ["ammoamount"] = 8, ["ammocost"] = 200, ["image"] = "weapons/weapon_mad_m3.vtf"},
+	[3] = {["ammo"] = "battery", ["ammoamount"] = 30, ["ammocost"] = 200, ["image"] = "weapons/weapon_mad_mp5.vtf"},
+	[4] = {["ammo"] = "ammo_45", ["ammoamount"] = 30, ["ammocost"] = 200, ["image"] = "weapons/weapon_mad_ump.vtf"},
+}
+
 
 function deso.armory.Vgui()
 	local frame = vgui.Create("DFrame")
-	frame:SetSize(400, 500)
+	frame:SetSize(400, 450)
 	frame:Center()
 	frame:MakePopup()
 	frame:SetDraggable(false)
@@ -33,11 +82,13 @@ function deso.armory.Vgui()
 		self:GetParent():Close()
 	end
 
-	local wepFrame = vgui.Create("DScrollPanel", frame)
-	wepFrame:SetSize(380, 430)
-	wepFrame:SetPos(10, 60)
+	local tab = vgui.Create("DPanel", frame)
+	tab:SetSize(380, 30)
+	tab:SetPos(10, 60)
 
-	local scroll = wepFrame:GetVBar()
+	local wepFrame = vgui.Create("DPanel", frame)
+	wepFrame:SetSize(380, 340)
+	wepFrame:SetPos(10, 100)
 
 	function frame:Paint(w, h)
 		surface.SetDrawColor(deso.col.dark)
@@ -45,7 +96,7 @@ function deso.armory.Vgui()
 
 		surface.SetDrawColor(deso.col.outline)
 		surface.DrawOutlinedRect(0, 0, w, h)
-		surface.DrawOutlinedRect(9, 59, 382, 432)
+		surface.DrawOutlinedRect(9, 99, 382, 342)
 
 		draw.SimpleTextOutlined("CP Armory", "deso_vgui_title", 20, 7, deso.col.text, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 2, deso.col.outline)
 	end
@@ -55,17 +106,6 @@ function deso.armory.Vgui()
 	function wepFrame:Paint(w, h)
 		surface.SetDrawColor(deso.col.light)
 		surface.DrawRect(0, 0, w, h)
-	end
-
-	function scroll:Paint(w, h) end
-	function scroll.btnUp:Paint(w, h) end	
-	function scroll.btnDown:Paint(w, h) end
-
-	function scroll.btnGrip:Paint(w, h) 
-		surface.SetDrawColor(deso.col.light)
-		surface.DrawRect(0, 0, w, h)
-
-		draw.RoundedBox(4, 0, 4, w - 8, h - 8, deso.col.dark)
 	end
 
 	for _, wep in ipairs(weps) do
@@ -80,36 +120,18 @@ function deso.armory.Vgui()
 		icon:SetImage(wep.image)
 
 		local purchaseBtn = vgui.Create("DButton", purchaseFrame)
-		purchaseBtn:SetSize(100, 30)
-		purchaseBtn:SetPos(238, 7)
+		purchaseBtn:SetSize(110, 30)
+		purchaseBtn:SetPos(243, 7)
 		purchaseBtn:SetText('')
 
-		function purchaseBtn:Paint(w, h)
-			if (self:IsDown()) then
-				surface.SetDrawColor(deso.col.text)
-				surface.DrawRect(0, 0, w, h)
+		function purchaseBtn:Paint(w, h) deso.vgui.BtnPaint(self, w, h, "PURCHSASE", "deso_vgui_button") end
 
-				surface.SetDrawColor(deso.col.outline)
-				surface.DrawOutlinedRect(0, 0, w, h)
+		function purchaseBtn:DoClick()
+			local class = wep.classname
 
-				draw.SimpleTextOutlined("PURCHASE", "deso_vgui_button", w / 2, h / 2, deso.col.light, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, deso.col.outline)
-			elseif (self:IsHovered()) then
-				surface.SetDrawColor(deso.col.text)
-				surface.DrawRect(0, 0, w, h)
-
-				surface.SetDrawColor(deso.col.outline)
-				surface.DrawOutlinedRect(0, 0, w, h)
-
-				draw.SimpleTextOutlined("PURCHASE", "deso_vgui_button", w / 2, h / 2, Color(255, 255, 255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, deso.col.outline)
-			else
-				surface.SetDrawColor(deso.col.light)
-				surface.DrawRect(0, 0, w, h)
-
-				surface.SetDrawColor(deso.col.outline)
-				surface.DrawOutlinedRect(0, 0, w, h)
-
-				draw.SimpleTextOutlined("PURCHASE", "deso_vgui_button", w / 2, h / 2, deso.col.text, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, deso.col.outline)
-			end
+			net.Start("deso_cparmory_purchase")
+				net.WriteString(class)
+			net.SendToServer()
 		end
 
 		function purchaseFrame:Paint(w, h)

@@ -7,11 +7,13 @@ if (SERVER) then
 	AddCSLuaFile "desoarmory/client/cl_desoarmory.lua"
 	AddCSLuaFile "desoarmory/cl_main.lua"
 	
+	include "desoarmory/server/sv_desoarmory.lua"
 	include "desoarmory/sv_main.lua"
 end
 
 if (CLIENT) then
 	deso = deso || {}
+	deso.vgui = deso.vgui || {}
 	deso.armory = deso.armory || {}
 
 	include "desoarmory/client/cl_fonts.lua"

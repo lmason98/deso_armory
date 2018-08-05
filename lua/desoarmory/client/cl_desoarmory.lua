@@ -1,11 +1,7 @@
-function deso.armory.CalcOpacity(distance)
-	local max, opac, mult = 255, 1, 4
+function deso.Notify(enum, length, message)
+	if (canNotify) then
 
-	if (distance > 100) then
-		opac = (210 - distance) * mult
-	else
-		opac = 255
+		surface.PlaySound("buttons/button15.wav")
+		notification.AddLegacy(message, enum, length)
 	end
-
-	return opac
 end
