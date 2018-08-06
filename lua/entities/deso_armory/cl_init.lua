@@ -1,7 +1,7 @@
 include "shared.lua"
 
 local scrW, scrH = ScrW(), ScrH()
-local white, text, outline = Color(255, 255, 255), deso.col.text, deso.col.outline
+local white, text, outline = Color(255, 255, 255), Color(0, 156, 255), Color(28, 28, 28)
 
 
 function ENT:Draw()
